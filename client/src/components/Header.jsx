@@ -1,64 +1,96 @@
-import {FaSearch} from 'react-icons/fa';
-import {Link, useNavigate} from 'react-router-dom';
-import {useSelector} from 'react-redux';
+import { FaMoon, FaSearch } from 'react-icons/fa';
+import { AiOutlineSearch } from 'react-icons/ai';
+import { Avatar, Button, Dropdown, Navbar, TextInput } from 'flowbite-react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 
 export default function Header() {
-  const {currentUser} = useSelector(state => state.user);
+  const path = useLocation().pathname;
+  const { currentUser } = useSelector((state) => state.user);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isNavbarOpen, setIsNavbarOpen] = useState(false); // State to manage navbar collapse
   const navigate = useNavigate();
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.set('searchTerm', searchTerm);
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
-  }
+  };
 
-  useEffect (() => {
+  useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = urlParams.get('searchTerm');
-    if(searchTermFromUrl) {
-        setSearchTerm(searchTermFromUrl);
+    if (searchTermFromUrl) {
+      setSearchTerm(searchTermFromUrl);
     }
   }, [location.search]);
-  return (
-    <header className='bg-slate-200 shadow-md'>
-        <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
-            <Link to='/'>
-                <h1 className='font-bold text-sm sm:text-xl flex flex-wrap'>
-                    <span className='text-slate-500'>Nilexia</span>
-                    <span className='text-slate-700'>Estate</span>
-                </h1>
-            </Link>
-            <form onSubmit={handleSubmit} className='bg-slate-100 p-3 rounded-lg flex items-center'>
-                <input value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
-                 type="text" placeholder='Search...' 
-                className='bg-transparent focus:outline-none w-24 sm:w-64'/>
-                <button>
-                    <FaSearch className='text-slate-500'/>
-                </button>
-            </form>
-            <ul className='flex gap-4'>
-                <Link to='/'>
-                    <li className='hidden sm:inline text-slate-700 hover:underline'>Home</li>
-                </Link>
-                <Link to='/about'>
-                    <li className='hidden sm:inline text-slate-700 hover:underline'>About</li>
-                </Link>
 
-                <Link to='/profile'>
-                    {
-                        currentUser ? (
-                            <img className='rounded-full h-7 w-7 object-cover' src={currentUser.avatar} alt="profile" />
-                        ) : (
-                            <li className='text-slate-700 hover:underline'>Sign in</li>
-                        )
-                    }
-                    
-                </Link>
-            </ul>
-        </div>
-    </header>
-  )
+  return (
+    <Navbar className='bg-slate-200 shadow-md'>
+      <Link
+        to='/'
+        className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'
+      >
+        <span className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white'>
+          Nilexia
+        </span>
+        Estate
+      </Link>
+      <form onSubmit={handleSubmit}>
+        <TextInput
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          type='text'
+          placeholder='Search...'
+          className='hidden lg:inline'
+          rightIcon={AiOutlineSearch}
+        />
+        <Button className='w-12 h-10 lg:hidden' color='gray' pill>
+          <AiOutlineSearch />
+        </Button>
+      </form>
+      <div className='flex gap-2 md:order-2'>
+        <Button className='w-12 h-10 hidden sm:inline' color='gray' pill>
+          <FaMoon />
+        </Button>
+        {/* Toggle button to show/hide the navbar collapse */}
+        <Navbar.Toggle onClick={() => setIsNavbarOpen(!isNavbarOpen)} />
+        <Link to='/sign-in'>
+          <Button gradientDuoTone='purpleToBlue' outline>
+            Sign In
+          </Button>
+        </Link>
+      </div>
+      {/* Conditionally render Navbar.Collapse based on state */}
+      {isNavbarOpen && (
+        <Navbar.Collapse className='flex gap-4'>
+          <Navbar.Link active={path === '/'} as={'div'}>
+            <Link to='/'>
+              <li>Home</li>
+            </Link>
+          </Navbar.Link>
+          <Navbar.Link active={path === '/about'} as={'div'}>
+            <Link to='/about'>
+              <li>About</li>
+            </Link>
+          </Navbar.Link>
+
+          <Link to='/profile'>
+            {currentUser ? (
+              <img
+                className='rounded-full h-7 w-7 object-cover'
+                src={currentUser.avatar}
+                alt='profile'
+              />
+            ) : (
+              <></>
+            )}
+          </Link>
+        </Navbar.Collapse>
+      )}
+    </Navbar>
+  );
 }
