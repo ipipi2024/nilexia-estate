@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import OAuth from '../components/OAuth';
+import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react';
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  console.log(formData);
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -43,30 +45,79 @@ export default function SignUp() {
   };
 
   return (
-    <div className='p-3 max-w-lg mx-auto'>
-      <h1 className='text-3xl text-center font-semibold 
-      my-7'>Sign Up</h1>
-      <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
-        <input type="text" placeholder='username' 
-        className='border p-3 rounded-lg ' id='username' onChange={handleChange}/>
-         <input type="email" placeholder='email' 
-        className='border p-3 rounded-lg ' id='email' onChange={handleChange}/>
-         <input type="password" placeholder='password' 
-        className='border p-3 rounded-lg ' id='password' onChange={handleChange}/>
-        <button disabled={loading} className='bg-slate-700 text-white
-         p-3 rounded-lg uppercase hover:opacity-95 
-         disabled:opacity-80'>
-          {loading?'loading...': 'Sign Up'}
-         </button>
-         <OAuth/>
-      </form>
-      <div className='flex gap-2 mt-5'>
-        <p>Have an account?</p>
-        <Link to={'/sign-in'}>
-          <span className='text-blue-700'>Sign in</span>
-        </Link>
+    <div className='min-h-screen mt-20'>
+      <div className='flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5'>
+        {/* left */}
+        <div className='flex-1'>
+          <Link to='/' className='font-bold dark:text-white text-4xl'>
+            <span className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white'>
+              Nilexia
+            </span>
+            Estate
+          </Link>
+          <p className='text-sm mt-5'>
+             You can sign up with your email and password
+            or with Google.
+          </p>
+        </div>
+        {/* right */}
+
+        <div className='flex-1'>
+          <form onSubmit={handleSubmit} className='flex flex-col gap-4' >
+            <div>
+              <Label value='Your username' />
+              <TextInput
+                type='text'
+                placeholder='Username'
+                id='username'
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <Label value='Your email' />
+              <TextInput
+                type='email'
+                placeholder='name@company.com'
+                id='email'
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <Label value='Your password' />
+              <TextInput
+                type='password'
+                placeholder='Password'
+                id='password'
+                onChange={handleChange}
+              />
+            </div>
+            <Button
+              gradientDuoTone='purpleToPink'
+              type='submit'
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <Spinner size='sm'/>
+                  <span className='pl-3'>Loading...</span>
+                </>
+              ): ('Sign Up')}
+            </Button>
+           
+          </form>
+          <div className='flex gap-2 text-sm mt-5'>
+            <span>Have an account?</span>
+            <Link to='/sign-in' className='text-blue-500'>
+              Sign In
+            </Link>
+          </div>
+            {error && (
+              <Alert className='mt-5' color='failure'>
+                {error}
+              </Alert>
+            )}
+        </div>
       </div>
-      {error && <p className='text-red-500'>{error}</p>}
     </div>
   )
 }

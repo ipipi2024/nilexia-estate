@@ -29,7 +29,7 @@ export default function Header() {
   }, [location.search]);
 
   return (
-    <Navbar className='bg-slate-200 shadow-md'>
+    <Navbar className='border-b-2'>
       <Link
         to='/'
         className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'
@@ -59,7 +59,7 @@ export default function Header() {
         {/* Toggle button to show/hide the navbar collapse */}
         <Navbar.Toggle onClick={() => setIsNavbarOpen(!isNavbarOpen)} />
         <Link to='/sign-in'>
-          <Button gradientDuoTone='purpleToBlue' outline>
+          <Button  outline gradientDuoTone='purpleToBlue' outline>
             Sign In
           </Button>
         </Link>
