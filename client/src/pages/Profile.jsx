@@ -10,6 +10,7 @@ signOutUserFailure,
 signOutUserSuccess} from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import {Link} from 'react-router-dom';
+import { Button, TextInput } from 'flowbite-react';
 
 export default function Profile() {
   const fileRef = useRef(null);
@@ -167,18 +168,22 @@ export default function Profile() {
             : ""
           }
         </p>
-        <input  onChange={handleChange} defaultValue={currentUser.username} type="text" placeholder='username' className='border p-3 rounded-lg' id="username" />
-        <input onChange={handleChange} defaultValue={currentUser.email} type="email" placeholder='email' className='border p-3 rounded-lg' id="email" />
-        <input  onChange={handleChange} type="password" placeholder='password' className='border p-3 rounded-lg' id='password' />
-        <button disabled={loading} className='bg-slate-700 text-white
-         hover:opacity-95 uppercase p-3 rounded-lg disabled:opacity-80'>
+        <TextInput  onChange={handleChange} defaultValue={currentUser.username} type="text" placeholder='username'  id="username" />
+        <TextInput onChange={handleChange} defaultValue={currentUser.email} type="email" placeholder='email'  id="email" />
+        <TextInput  onChange={handleChange} type="password" placeholder='password'  id='password' />
+        <Button disabled={loading} 
+          gradientDuoTone={'purpleToBlue'}
+          outline
+        >
           {
             loading ? 'Loading...' : 'Update'
           }
-         </button>
-         <Link className='bg-green-700 text-white p-3 rounded-lg 
-         uppercase text-center hover:opacity-95' to={'/create-listing'}>
-          Create Listing
+         </Button>
+         <Link  to={'/create-listing'}>
+            <Button type='button' gradientDuoTone={'purpleToPink'}
+             className='w-full'>
+                Create Listing
+            </Button>
          </Link>
       </form>
       <div className="flex flex-row justify-between mt-5">
@@ -191,7 +196,7 @@ export default function Profile() {
       <p className='text-green-700'>
           {updateSuccess ? 'User is updated successfully!' : ''}
       </p>
-      <button onClick={handleShowListings} className='text-green-700 w-full'>Show Listings</button>
+      <button onClick={handleShowListings} className=' w-full'>Show Listings</button>
       <p className='text-red-700 mt-5'>
         {
           showListingsError ? 'Error showing lisstings': ''
@@ -208,7 +213,7 @@ export default function Profile() {
               <Link to={`/listing/${listing._id}`}>
                 <img className='h-16 w-16 object-contain' src={listing.imageUrls[0]} alt="listing cover" />
               </Link>
-              <Link className='text-slate-700 font-semibold flex-1 
+              <Link className='font-semibold flex-1 
                 hover:underline truncate' to={`/listing/${listing._id}`}>
                 <p >{listing.name}</p>
               </Link>

@@ -1,13 +1,16 @@
-import { FaMoon, FaSearch } from 'react-icons/fa';
+import { FaMoon, FaSun, FaSearch } from 'react-icons/fa';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { Avatar, Button, Dropdown, Navbar, TextInput } from 'flowbite-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
+import { toggleTheme } from '../redux/theme/themeSlice';
 
 export default function Header() {
   const path = useLocation().pathname;
+  const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
+  const {theme} = useSelector((state) => state.theme);
   const [searchTerm, setSearchTerm] = useState('');
   const [isNavbarOpen, setIsNavbarOpen] = useState(false); // State to manage navbar collapse
   const navigate = useNavigate();
@@ -48,18 +51,19 @@ export default function Header() {
           className='hidden lg:inline'
           rightIcon={AiOutlineSearch}
         />
+      </form>
         <Button className='w-12 h-10 lg:hidden' color='gray' pill>
           <AiOutlineSearch />
         </Button>
-      </form>
       <div className='flex gap-2 md:order-2'>
-        <Button className='w-12 h-10 hidden sm:inline' color='gray' pill>
-          <FaMoon />
+        <Button className='w-12 h-10 hidden sm:inline' color='gray' pill
+        onClick={() => dispatch(toggleTheme())}>
+          {theme === 'light' ? <FaSun/> : <FaMoon/>}
         </Button>
         {/* Toggle button to show/hide the navbar collapse */}
         <Navbar.Toggle onClick={() => setIsNavbarOpen(!isNavbarOpen)} />
         <Link to='/sign-in'>
-          <Button  outline gradientDuoTone='purpleToBlue' outline>
+          <Button  outline gradientDuoTone='purpleToBlue'>
             Sign In
           </Button>
         </Link>

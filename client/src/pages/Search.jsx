@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import ListingItem from '../components/ListingItem';
+import { Button, Select, TextInput } from 'flowbite-react';
 
 export default function Search() {
     const navigate = useNavigate();
@@ -132,14 +133,13 @@ export default function Search() {
 
   return (
     <div className='flex flex-col md:flex-row'>
-        <div className="p-7 border-b-2 md:border-r-2 md:min-h-screen">
+        <div className="p-7 border-b md:border-r md:min-h-screen border-gray-500">
             <form onSubmit={handleSubmit} className='flex flex-col gap-8'>
                 <div className="flex items-center gap-2">
                     <label className='whitespace-nowrap font-semibold'>
                         Search Term:
                     </label>
-                    <input type="text" id='searchTerm' placeholder='Search...' 
-                    className='border rounded-lg p-3 w-full' 
+                    <TextInput type="text" id='searchTerm' placeholder='Search...' 
                     value={sidebardata.searchTerm}
                     onChange={handleChange}/>
                 </div>
@@ -196,25 +196,25 @@ export default function Search() {
                 </div>
                 <div className="flex items-center gap-2">
                     <label className='font-semibold'>Sort:</label>
-                    <select
+                    <Select
                         onChange={handleChange}
                         defaultValue={'created_at_desc'}
                         id='sort_order'
-                        className='border rounded-lg p-3'
+                      
                     >
                         <option value='regularPrice_desc'>Price high to low</option>
                         <option value='regularPrice_asc'>Price low to hight</option>
                         <option value='createdAt_desc'>Latest</option>
                         <option value='createdAt_asc'>Oldest</option>
-                    </select>
+                    </Select>
                 </div>
-                <button className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95'>
+                <Button outline gradientDuoTone={'purpleToBlue'}>
                     Search
-                </button>
+                </Button>
             </form>
         </div>
         <div className='flex-1'>
-            <h1 className='text-3xl font-semibold border-b p-3 text-slate-700 mt-5'>
+            <h1 className='text-3xl font-semibold sm:border-b border-gray-500 p-3 mt-5'>
                 Listing results:
             </h1>
             <div className='p-7 flex flex-wrap gap-4'>
@@ -233,15 +233,15 @@ export default function Search() {
                     <ListingItem key={listing._id} listing={listing} />
                     ))}
 
+            </div>
                 {showMore && (
-                    <button
+                    <button className='mb-5 text-center w-full'
                     onClick={onShowMoreClick}
-                    className='text-green-700 hover:underline p-7 text-center w-full'
+                    
                     >
-                    Show more
+                    Show more...
                     </button>
                 )}
-            </div>
       </div>
     </div>
   )
