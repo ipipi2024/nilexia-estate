@@ -11,6 +11,8 @@ import UpdateListing from "./pages/UpdateListing"
 import Listing from "./pages/Listing"
 import Search from "./pages/Search"
 import FooterCom from "./components/Footer"
+import Dashboard from "./pages/Dashboard"
+import OnlyAdminPrivateRoute from "./components/OnlyAdminPrivateRoute"
 
 export default function App() {
   return (
@@ -20,7 +22,11 @@ export default function App() {
         <Route path='/' element={<Home />} />
         <Route path='/about' element={<About />} />
         <Route element={<PrivateRoute/>}>
+          <Route path='/dashboard' element={<Dashboard/>} />
           <Route path='/profile' element={<Profile />} />
+          
+        </Route>
+        <Route element={<OnlyAdminPrivateRoute />}>
           <Route path="/create-listing" element={<CreateListing/>}/>
           <Route path="/update-listing/:listingId" element={<UpdateListing/>}/>
         </Route>
