@@ -5,6 +5,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { toggleTheme } from '../redux/theme/themeSlice';
+import { signOutUserFailure,signOutUserStart, signOutUserSuccess } from '../redux/user/userSlice';
 
 export default function Header() {
   const path = useLocation().pathname;
@@ -30,6 +31,22 @@ export default function Header() {
       setSearchTerm(searchTermFromUrl);
     }
   }, [location.search]);
+
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutUserStart());
+      const res = await fetch('/api/auth/signout');
+      const data = res.json();
+      if(data.success === false) {
+        dispatch(signOutUserFailure(data.message));
+        return;
+      }
+      dispatch(signOutUserSuccess(data));
+
+    } catch (error) {
+      dispatch(signOutUserFailure(error.message));
+    }
+  }
 
   return (
     <Navbar className='border-b-2'>
@@ -60,41 +77,40 @@ export default function Header() {
         onClick={() => dispatch(toggleTheme())}>
           {theme === 'light' ? <FaSun/> : <FaMoon/>}
         </Button>
-        {/* Toggle button to show/hide the navbar collapse */}
-        <Navbar.Toggle onClick={() => setIsNavbarOpen(!isNavbarOpen)} />
-        <Link to='/sign-in'>
-          <Button  outline gradientDuoTone='purpleToBlue'>
-            Sign In
-          </Button>
-        </Link>
+        {currentUser ? (
+          <Dropdown arrowIcon={false} inline 
+          label={<Avatar alt='user' img={currentUser.avatar} rounded/>}>
+            <Dropdown.Header>
+              <span className='block text-sm'>@{currentUser.username}</span>
+              <span className='block text-sm font-medium truncate'>{currentUser.email}</span>
+            </Dropdown.Header>
+            <Link to={'/profile'}>
+              <Dropdown.Item>Profile</Dropdown.Item>
+            </Link>
+            <Dropdown.Divider/>
+            <Dropdown.Item onClick={handleSignOut}>Sign out</Dropdown.Item>
+          </Dropdown>
+        ): (
+          <Link to={'/sign-in'}>
+            <Button outline gradientDuoTone={'purpleToBlue'} >
+              Sign In
+            </Button>
+          </Link>
+        )}
+        <Navbar.Toggle/>
       </div>
-      {/* Conditionally render Navbar.Collapse based on state */}
-      {isNavbarOpen && (
-        <Navbar.Collapse className='flex gap-4'>
+        <Navbar.Collapse>
           <Navbar.Link active={path === '/'} as={'div'}>
             <Link to='/'>
-              <li>Home</li>
+              Home
             </Link>
           </Navbar.Link>
           <Navbar.Link active={path === '/about'} as={'div'}>
             <Link to='/about'>
-              <li>About</li>
+              About
             </Link>
           </Navbar.Link>
-
-          <Link to='/profile'>
-            {currentUser ? (
-              <img
-                className='rounded-full h-7 w-7 object-cover'
-                src={currentUser.avatar}
-                alt='profile'
-              />
-            ) : (
-              <></>
-            )}
-          </Link>
         </Navbar.Collapse>
-      )}
     </Navbar>
   );
 }
