@@ -171,7 +171,7 @@ export default function Profile() {
         <TextInput  onChange={handleChange} defaultValue={currentUser.username} type="text" placeholder='username'  id="username" />
         <TextInput onChange={handleChange} defaultValue={currentUser.email} type="email" placeholder='email'  id="email" />
         <TextInput  onChange={handleChange} type="password" placeholder='password'  id='password' />
-        <Button disabled={loading} 
+        <Button type='submit' disabled={loading} 
           gradientDuoTone={'purpleToBlue'}
           outline
         >

@@ -208,7 +208,7 @@ export default function Search() {
                         <option value='createdAt_asc'>Oldest</option>
                     </Select>
                 </div>
-                <Button outline gradientDuoTone={'purpleToBlue'}>
+                <Button type='submit' outline gradientDuoTone={'purpleToBlue'}>
                     Search
                 </Button>
             </form>
