@@ -200,8 +200,8 @@ export default function CreateListing() {
                         formData.offer && 
                         (
                             <div className="flex items-center gap-2">
-                                <input onChange={handleChange} value={formData.discountPrice} type="number" id='discountPrice' min='0' max='1000000' required 
-                                className='p-3 border border-gray-300 rounded-lg' />
+                                <TextInput onChange={handleChange} value={formData.discountPrice} type="number" id='discountPrice' min='0' max='1000000' required 
+                                />
                                 <div className="flex flex-col items-center">
                                     <p>Discounted price</p>
                                     {
@@ -235,7 +235,7 @@ export default function CreateListing() {
                                     styles={{
                                         path: {
                                             // Customize the path color
-                                            stroke: `#10900a`, // Indigo color, adjust to your preferred color
+                                            stroke: `#15ead4 `, // Indigo color, adjust to your preferred color
                                             strokeLinecap: 'round', // Makes the ends of the progress bar rounded
                                             transition: 'stroke-dashoffset 0.5s ease 0s',
                                           },
