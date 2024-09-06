@@ -3,6 +3,9 @@ import {getDownloadURL, getStorage, ref, uploadBytesResumable} from 'firebase/st
 import {app} from '../firebase';
 import {useSelector} from 'react-redux';
 import {useNavigate, useParams} from 'react-router-dom';
+import { Alert, Button, FileInput, Textarea, TextInput } from 'flowbite-react';
+import 'react-circular-progressbar/dist/styles.css';
+import {CircularProgressbar} from 'react-circular-progressbar';
 
 export default function CreateListing() {
     const {currentUser} = useSelector(state => state.user);
@@ -27,6 +30,8 @@ export default function CreateListing() {
     const [imageUploading, setImageUploading] = useState(false);
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(false);
+    console.log(formData);
+
     useEffect (() => {
         const fetchListing = async () => {
             const listingId = params.listingId;
@@ -74,6 +79,7 @@ export default function CreateListing() {
                 (snapshot) => {
                     const progress = (snapshot.bytesTransferred/snapshot.totalBytes) * 100;
                     console.log(`Upload is ${progress}% done`);
+                    setImageUploading(progress.toFixed(0));
                 },
                 (error) => {
                     reject(error);
@@ -152,14 +158,14 @@ export default function CreateListing() {
     }
   return (
     <main className='p-3 max-w-4xl mx-auto'>
-       <h1 className='text-3xl font-semibold text-center my-7'>Update a Listing</h1> 
+       <h1 className='text-3xl font-semibold text-center my-7'>Update Listing</h1> 
        <form onSubmit={handleSubmit} className='flex flex-col sm:flex-row gap-4'>
             <div className="flex flex-col gap-4 flex-1">
-                <input onChange={handleChange} value={formData.name} type="text" placeholder='Name' className='border p-3 rounded-lg' 
+                <TextInput onChange={handleChange} value={formData.name} type="text" placeholder='Name'  
                 id='name' maxLength='62' minLength='10' required />
-                <textarea onChange={handleChange} value={formData.description} type="text" placeholder='Description' className='border p-3 rounded-lg' 
+                <Textarea cols={2} rows={4} onChange={handleChange} value={formData.description} type="text" placeholder='Description' 
                 id='description' required />
-                <input onChange={handleChange} value={formData.address} type="text" placeholder='Address' className='border p-3 rounded-lg' 
+                <TextInput onChange={handleChange} value={formData.address} type="text" placeholder='Address' 
                 id='address' required />
                 <div className="flex gap-6 flex-wrap">
                     <div className="flex gap-2">
@@ -185,18 +191,18 @@ export default function CreateListing() {
                 </div>
                 <div className="flex flex-wrap gap-6">
                     <div className="flex items-center gap-2">
-                        <input onChange={handleChange} value={formData.bedrooms} type="number" id='bedrooms' min='1' max='10' required 
-                        className='p-3 border border-gray-300 rounded-lg' />
+                        <TextInput onChange={handleChange} value={formData.bedrooms} type="number" id='bedrooms' min='1' max='10' required 
+                         />
                         <p>Beds</p>
                     </div>
                     <div className="flex items-center gap-2">
-                        <input onChange={handleChange} value={formData.bathrooms} type="number" id='bathrooms' min='1' max='10' required 
-                        className='p-3 border border-gray-300 rounded-lg' />
+                        <TextInput onChange={handleChange} value={formData.bathrooms} type="number" id='bathrooms' min='1' max='10' required 
+                         />
                         <p>Bath</p>
                     </div>
                     <div className="flex items-center gap-2">
-                        <input onChange={handleChange} value={formData.regularPrice} type="number" id='regularPrice' min='50' max='1000000' required 
-                        className='p-3 border border-gray-300 rounded-lg' />
+                        <TextInput onChange={handleChange} value={formData.regularPrice} type="number" id='regularPrice' min='50' max='1000000' required 
+                         />
                         <div className="flex flex-col items-center">
                             <p>Regular price</p>
                             {
@@ -209,8 +215,8 @@ export default function CreateListing() {
                         formData.offer && 
                         (
                             <div className="flex items-center gap-2">
-                                <input onChange={handleChange} value={formData.discountPrice} type="number" id='discountPrice' min='0' max='1000000' required 
-                                className='p-3 border border-gray-300 rounded-lg' />
+                                <TextInput onChange={handleChange} value={formData.discountPrice} type="number" id='discountPrice' min='0' max='1000000' required 
+                                />
                                 <div className="flex flex-col items-center">
                                     <p>Discounted price</p>
                                     {
@@ -227,16 +233,45 @@ export default function CreateListing() {
             </div>
             <div className="flex flex-col flex-1 gap-4">
                 <p className='font-semibold'>Images: 
-                    <span className='font-normal text-gray-600 ml-2'>The first image will be the cover (max 6)</span>
+                    <span className='font-normal ml-2'>The first image will be the cover (max 6)</span>
                 </p>
-                <div className="flex gap-4">
-                    <input onChange={(e) => setFiles(e.target.files)} className='p-3 border border-gray-300 rounded w-full' type="file" id='images' accept='image/*' multiple />
-                    <button disabled={imageUploading} type='button' onClick={handleImageSubmit} className='p-3 text-green-700 border border-green-700 
-                    rounded uppercase hover:shadow-lg disabled:opacity-80'>{imageUploading ? 'Uploading...' : 'Upload'}</button>
+                <div className='flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3'>
+                    <FileInput onChange={(e) => setFiles(e.target.files)} type="file" id='images' accept='image/*' multiple />
+                    <Button disabled={imageUploading} type='button' 
+                        onClick={handleImageSubmit} 
+                        size='sm'
+                        gradientDuoTone={'purpleToBlue'}
+                    >
+                        {imageUploading ? (
+                            <div className="w-16 h-16">
+                                <CircularProgressbar 
+                                    value={imageUploading}
+                                    text={`${imageUploading || 0}%`}
+                                    styles={{
+                                        path: {
+                                            // Customize the path color
+                                            stroke: `#15ead4 `, // Indigo color, adjust to your preferred color
+                                            strokeLinecap: 'round', // Makes the ends of the progress bar rounded
+                                            transition: 'stroke-dashoffset 0.5s ease 0s',
+                                          },
+                                        trail: {
+                                            stroke: '#cdcecb'
+                                        },
+                                        text: {
+                                            fill: '#FFFFFF',
+                                            fontWeight: 'bold',
+                                            fontSize: '1.5rem'
+                                        }
+                                    }}  
+                                />
+                            </div>
+                        ): (
+                            'Upload'
+                        )}
+                    
+                    </Button>
                 </div>
-                <p className='text-red-700 text-sm'>
-                {imageUploadError && imageUploadError}
-                </p>
+                {imageUploadError && <Alert color='failure'>{imageUploadError}</Alert>}
                 {
                     formData.imageUrls.length > 0 && formData.imageUrls.map((url,index) => (
                         <div key={url} className="flex justify-between p-3 border items-center">
@@ -246,13 +281,12 @@ export default function CreateListing() {
                         </div>
                     ))
                 }
-                <button disabled={loading || imageUploading} className='p-3 bg-slate-700 
-                text-white rounded-lg uppercase 
+                <Button type='submit' disabled={loading || imageUploading} outline gradientDuoTone={'purpleToPink'} className=' rounded-lg uppercase 
                 hover:opacity-95 disabled:opacity-80'>
                     {
                         loading ? 'Updating...' : 'Update listing'
                     }
-                </button>
+                </Button>
                 {
                     error && <p className='text-red-700 text-sm'>{error}</p>
                 }
