@@ -13,6 +13,10 @@ import Search from "./pages/Search"
 import FooterCom from "./components/Footer"
 import Dashboard from "./pages/Dashboard"
 import OnlyAdminPrivateRoute from "./components/OnlyAdminPrivateRoute"
+import ForgotPassword from "./pages/ForgotPassword";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ResetPassword from "./pages/ResetPassword"
 
 export default function App() {
   return (
@@ -34,8 +38,24 @@ export default function App() {
         <Route path='/sign-in' element={<SignIn />} />
         <Route path="/listing/:listingId" element={<Listing/>}/>
         <Route path="/search" element={<Search/>}/>
+        <Route path="/forgot-password" element={<ForgotPassword/>}/>
+        <Route path="/reset-password/:resetToken" element={<ResetPassword/>}/>
+
+        
       </Routes>
       <FooterCom/>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </BrowserRouter>
   )
 }
