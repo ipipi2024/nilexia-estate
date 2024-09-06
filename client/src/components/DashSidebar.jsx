@@ -73,7 +73,7 @@ export default function DashSidebar() {
                 icon={HiDocumentText}
                 as='div'
               >
-                Posts
+                Listings
               </Sidebar.Item>
             </Link>
           )}
