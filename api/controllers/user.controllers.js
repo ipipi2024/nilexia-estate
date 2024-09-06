@@ -101,7 +101,7 @@ export const requestPasswordReset = async (req, res, next) => {
             },
         });
 
-        const resetUrl = `https://nilexia-estate.onrender.com//reset-password/${resetToken}`; // Use the plain token in the URL
+        const resetUrl = `https://nilexia-estate.onrender.com/reset-password/${resetToken}`; // Use the plain token in the URL
         const mailOptions = {
             to: user.email,
             from: process.env.EMAIL_USER,
