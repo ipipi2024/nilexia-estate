@@ -15,6 +15,7 @@ import {
   } from 'react-icons/fa';
 import { useSelector } from "react-redux";
 import Contact from "../components/Contact";
+import Map from "../components/Map";
   //import Contact from '../components/Contact';
 
 export default function Listing() {
@@ -163,7 +164,13 @@ export default function Listing() {
                         }
                         {contact && <Contact listing={listing}/>}
                         
-                        
+                         {/* Add Map component here */}
+                         {listing.geoLocation && (
+                            <div className="my-5">
+                                <h2 className="text-xl font-semibold mb-2">Location</h2>
+                                <Map lat={listing.geoLocation.lat} lng={listing.geoLocation.lng} />
+                            </div>
+                        )}
                     </div>
                 </>
             )

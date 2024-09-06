@@ -1,14 +1,41 @@
 import Listing from "../models/listing.model.js";
 import { errorHandler } from "../utils/error.js";
+import axios from "axios";
 
-export const createListing = async (req,res,next) => {
-    try {
-        const listing = await Listing.create(req.body);
-        return res.status(201).json(listing);
-    } catch(error) {
-        next(error);
+// Function to get geolocation from an address
+const getGeolocation = async (address) => {
+    const apiKey = process.env.GOOGLE_GEOCODING_API_KEY; // Store your API key in environment variables
+    console.log(apiKey);
+    const response = await axios.get(
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`
+    );
+  
+    if (response.data.status === 'OK') {
+      const { lat, lng } = response.data.results[0].geometry.location;
+      return { lat, lng };
+    } else {
+      throw new Error('Unable to fetch geolocation data');
     }
-}
+  };
+
+// Create Listing with Geolocation
+export const createListing = async (req, res, next) => {
+    try {
+      const { address } = req.body;
+      
+      // Get geolocation from address
+      const geoLocation = await getGeolocation(address);
+  
+      const listing = await Listing.create({
+        ...req.body,
+        geoLocation, // Add geolocation data to the listing
+      });
+  
+      return res.status(201).json(listing);
+    } catch (error) {
+      next(error);
+    }
+  };
 
 export const deleteListing = async (req,res,next) => {
     const listing = await Listing.findById(req.params.id);
@@ -28,28 +55,36 @@ export const deleteListing = async (req,res,next) => {
     }
 }
 
+// Update Listing with Geolocation
 export const updateListing = async (req, res, next) => {
     const listing = await Listing.findById(req.params.id);
     if (!listing) {
-        return next(errorHandler(404, 'Listing not found!'));
+      return next(errorHandler(404, 'Listing not found!'));
     }
     if (req.user.id !== listing.userRef) {
-        return next(errorHandler(401, 'You can only update your own listings!'));
+      return next(errorHandler(401, 'You can only update your own listings!'));
     }
-
+  
     try {
-        const updatedListing = await Listing.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            {new: true}
-        );
-
-        res.status(200).json(updatedListing);
-
-    } catch(error) {
-        next(error);
+      const { address } = req.body;
+      
+      // Get geolocation if address is updated
+      let geoLocation = listing.geoLocation; // Default to existing geolocation
+      if (address && address !== listing.address) {
+        geoLocation = await getGeolocation(address);
+      }
+  
+      const updatedListing = await Listing.findByIdAndUpdate(
+        req.params.id,
+        { ...req.body, geoLocation },
+        { new: true }
+      );
+  
+      res.status(200).json(updatedListing);
+    } catch (error) {
+      next(error);
     }
-}
+  };
 
 export const getListing = async (req, res, next) => {
     try {

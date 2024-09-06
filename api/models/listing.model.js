@@ -52,6 +52,10 @@ const listingSchema = new mongoose.Schema({
     userRef: {
         type: String,
         required: true
+    },
+    geoLocation: { // New field for geolocation
+        lat: { type: Number, required: true },
+        lng: { type: Number, required: true }
     }
 
 
