@@ -59,7 +59,7 @@ export default function Contact({ listing }) {
 
                     {landlord.phone && (
                         <a
-                            href={`https://wa.me/${landlord.phone}?text=${encodeURIComponent(message)}`}
+                            href={`https://wa.me/${landlord.phone.replace(/\s+/g, '')}?text=${encodeURIComponent(message)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className='bg-green-500 text-white text-center p-3 uppercase rounded-lg hover:opacity-95'
@@ -67,6 +67,7 @@ export default function Contact({ listing }) {
                             WhatsApp
                         </a>
                     )}
+
                 </div>
             )}
         </>
