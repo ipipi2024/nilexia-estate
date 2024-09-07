@@ -30,6 +30,10 @@ const userSchema = new mongoose.Schema({
     resetTokenExpiry: {
         type: Date,
     },
+    phone: {
+        type: String,
+        required: false
+    }
     // Add more fields as needed
 }, {timestamps: true})
 
