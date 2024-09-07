@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, EffectFade, Autoplay } from 'swiper/modules';
 import SwiperCore from 'swiper';
@@ -10,6 +10,7 @@ export default function Home() {
   const [offerListings, setOfferListings] = useState([]);
   const [saleListings, setSaleListings] = useState([]);
   const [rentListings, setRentListings] = useState([]);
+  const navigate =useNavigate();
   SwiperCore.use([Navigation]);
   console.log(offerListings);
   useEffect(() => {
@@ -57,7 +58,7 @@ export default function Home() {
           place with ease
         </h1>
         <div className='text-gray-500 text-xs sm:text-sm'>
-          Nilexia Estate is the best place to find your next perfect place to
+          Nilexia is the best place to find your next perfect place to
           live.
           <br />
           We have a wide range of properties for you to choose from.
@@ -89,10 +90,13 @@ export default function Home() {
                 }}
                 className='relative h-[500px]'
               >
-                {/* Property Name */}
-                <p className="text-white absolute left-4 top-4 font-medium bg-black bg-opacity-70 p-2 rounded-md">
-                  {listing.name}
-                </p>
+                <p className="text-[#f1faee] absolute left-1 top-3 font-medium max-w-[90%] bg-[#457b9d] shadow-lg opacity-90 p-2 rounded-br-3xl">
+                {listing.name}
+              </p>
+              <p className="text-[#f1faee] absolute left-1 bottom-1 font-semibold max-w-[90%] bg-[#e63946] shadow-lg opacity-90 p-2 rounded-tr-3xl">
+                ${listing.discountedPrice ?? listing.regularPrice}
+                {listing.type === "rent" && " / month"}
+              </p>
               </div>
             </SwiperSlide>
           ))}

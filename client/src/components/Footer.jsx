@@ -14,7 +14,6 @@ export default function FooterCom() {
               <span className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white'>
                 Nilexia
               </span>
-              Estate
             </Link>
           </div>
           <div className='grid grid-cols-2 gap-8 mt-4 sm:grid-cols-3 sm:gap-6'>
@@ -33,7 +32,7 @@ export default function FooterCom() {
                   target='_blank'
                   rel='noopener noreferrer'
                 >
-                  Nilexia Estate
+                  Nilexia
                 </Footer.Link>
               </Footer.LinkGroup>
             </div>
@@ -41,7 +40,7 @@ export default function FooterCom() {
               <Footer.Title title='Follow us' />
               <Footer.LinkGroup col>
                 <Footer.Link
-                  href='https://www.github.com/sahandghavidel'
+                  href='https://www.github.com/ipipi2024'
                   target='_blank'
                   rel='noopener noreferrer'
                 >
