@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper/modules';
+import { Navigation, EffectFade, Autoplay } from 'swiper/modules';
 import SwiperCore from 'swiper';
 import 'swiper/css/bundle';
 import ListingItem from '../components/ListingItem';
@@ -69,20 +69,31 @@ export default function Home() {
           Let's get started...
         </Link>
       </div>
-       {/* swiper */}
-       <Swiper navigation>
+        {/* Swiper Slider */}
+      <Swiper
+        navigation
+        effect="fade"
+        modules={[EffectFade, Autoplay]}
+        autoplay={{ delay: 3000 }}
+        slidesPerView={1}
+        pagination={{ type: "progressbar" }}
+      >
         {offerListings &&
           offerListings.length > 0 &&
           offerListings.map((listing) => (
-            <SwiperSlide key={listing._id}>
+            <SwiperSlide key={listing._id} onClick={() => navigate(`/listing/${listing._id}`)}>
               <div
                 style={{
                   background: `url(${listing.imageUrls[0]}) center no-repeat`,
-                  backgroundSize: 'contain',
+                  backgroundSize: 'cover',
                 }}
-                className='h-[500px]'
-                key={listing._id}
-              ></div>
+                className='relative h-[500px]'
+              >
+                {/* Property Name */}
+                <p className="text-white absolute left-4 top-4 font-medium bg-black bg-opacity-70 p-2 rounded-md">
+                  {listing.name}
+                </p>
+              </div>
             </SwiperSlide>
           ))}
       </Swiper>
